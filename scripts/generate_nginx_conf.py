@@ -47,14 +47,6 @@ http {
         gzip_types text/plain text/xml text/css text/less application/x-javascript application/xml application/json application/javascript;
         gzip_vary on;
 
-        # Cache static data
-        location ~* /web/static/ {
-            proxy_cache_valid 200 60m;
-            proxy_buffering on;
-            expires 864000;
-            proxy_pass http://backend;
-        }
-
         location / {
                 proxy_pass http://backend;
                 # The following makes the timeout broader

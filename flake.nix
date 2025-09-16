@@ -50,11 +50,11 @@
               read -r -p "PostgreSQL database name (default: develop): " pgdatabase
               pgdatabase=''${pgdatabase:-develop}
 
-              read -r -p "FastAPI port (default: 8000): " fastapi_port
-              fastapi_port=''${fastapi_port:-8000}
+              read -r -p "FastAPI port (default: 8080): " fastapi_port
+              fastapi_port=''${fastapi_port:-8080}
 
-              read -r -p "Nginx port (default: 80): " nginx_port
-              nginx_port=''${nginx_port:-80}
+              read -r -p "Nginx port (default: 1080): " nginx_port
+              nginx_port=''${nginx_port:-1080}
 
               read -r -p "Github token (how to generate check in general README): " github_token
               github_token=''${github_token:-}
@@ -221,6 +221,11 @@
               else
                 echo "Failed to reload Nginx. Is it running?"
               fi
+            }
+
+            function fastapi_start() {
+              echo "Starting FastAPI..."
+              fastapi dev main.py --port $FASTAPI_PORT
             }
 
             function all_start() {
