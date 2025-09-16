@@ -1,0 +1,14 @@
+.idea
+.vscode
+
+.amazonq/agents
+
+.postgres
+.aws
+.env
+.venv
+.nginx
+.tools
+.mcp-servers
+
+nix-python.sh

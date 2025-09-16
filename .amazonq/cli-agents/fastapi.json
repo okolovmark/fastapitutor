@@ -1,0 +1,113 @@
+{
+  "name": "fastapi-demo",
+  "description": "FastAPI agent configuration",
+  "mcpServers": {
+    "postgres": {
+      "command": "scripts/mcp-postgres-wrapper.sh",
+      "transportType": "stdio",
+      "timeout": 60000
+    },
+    "excel": {
+      "command": "scripts/mcp-excel-wrapper.sh",
+      "transportType": "stdio",
+      "timeout": 60000
+    },
+    "github": {
+      "command": "scripts/mcp-github-wrapper.sh",
+      "transportType": "stdio",
+      "timeout": 60000
+    }
+  },
+  "tools": [
+    "@builtin",
+    "@postgres",
+    "@excel",
+    "@github"
+  ],
+  "allowedTools": [
+    "fs_read",
+    "@excel/apply_formula",
+    "@excel/validate_formula_syntax",
+    "@excel/format_range",
+    "@excel/read_data_from_excel",
+    "@excel/write_data_to_excel",
+    "@excel/create_workbook",
+    "@excel/create_worksheet",
+    "@excel/create_chart",
+    "@excel/create_pivot_table",
+    "@excel/create_table",
+    "@excel/copy_worksheet",
+    "@excel/delete_worksheet",
+    "@excel/rename_worksheet",
+    "@excel/get_workbook_metadata",
+    "@excel/merge_cells",
+    "@excel/unmerge_cells",
+    "@excel/copy_range",
+    "@excel/delete_range",
+    "@excel/validate_excel_range",
+    "@excel/get_data_validation_info",
+    "@postgres/list_schemas",
+    "@postgres/get_top_queries",
+    "@postgres/analyze_db_health",
+    "@postgres/analyze_query_indexes",
+    "@postgres/list_objects",
+    "@postgres/get_object_details",
+    "@postgres/explain_query",
+    "@postgres/analyze_workload_indexes",
+    "@github/add_issue_comment",
+    "@github/submit_pending_pull_request_review",
+    "@github/search_users",
+    "@github/search_repositories",
+    "@github/search_orgs",
+    "@github/search_issues",
+    "@github/search_code",
+    "@github/list_tags",
+    "@github/list_sub_issues",
+    "@github/list_pull_requests",
+    "@github/list_issues",
+    "@github/list_discussion_categories",
+    "@github/list_discussions",
+    "@github/list_commits",
+    "@github/list_branches",
+    "@github/get_tag",
+    "@github/get_pull_request_status",
+    "@github/get_pull_request_reviews",
+    "@github/get_pull_request_diff",
+    "@github/get_me",
+    "@github/get_issue",
+    "@github/get_file_contents",
+    "@github/get_discussion_comments",
+    "@github/get_discussion",
+    "@github/get_commit",
+    "@github/create_pull_request",
+    "@github/create_pending_pull_request_review",
+    "@github/create_issue",
+    "@github/create_and_submit_pull_request_review",
+    "@github/add_sub_issue",
+    "@github/add_comment_to_pending_review",
+    "@github/add_issue_comment",
+    "@github/search_pull_requests",
+    "@github/get_pull_request",
+    "@github/get_pull_request_files",
+    "@github/get_pull_request_comments"
+  ],
+  "toolsSettings": {
+    "execute_bash": {
+      "alwaysAllow": [
+        {
+          "preset": "readOnly"
+        }
+      ]
+    }
+  },
+  "resources": [
+    "file://.amazonq/rules/fastapi-demo.md"
+  ],
+  "hooks": {
+    "agentSpawn": [
+      {
+        "command": "ls -la"
+      }
+    ]
+  }
+}
