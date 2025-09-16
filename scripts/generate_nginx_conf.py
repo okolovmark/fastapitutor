@@ -15,7 +15,7 @@ def generate_nginx_conf():
 
     http_port = os.getenv('FASTAPI_PORT', '')
     nginx_port = os.getenv('NGINX_PORT', '')
-    
+
     config_content = """error_log logs/error.log;
 pid logs/nginx.pid;
 
@@ -63,11 +63,11 @@ http {
         }
     }
 }""".replace('HTTP_PORT', http_port).replace('NGINX_PORT', nginx_port)
-    
+
     # Write configuration to file
     with open(conf_path, 'w') as f:
         f.write(config_content)
-    
+
     print(f"Generated nginx.conf with ports: FastAPI HTTP={http_port}, Nginx={nginx_port}")
 
 if __name__ == '__main__':
