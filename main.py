@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Annotated
 
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Path, Query
 from pydantic import BaseModel, AfterValidator, BeforeValidator
 
 
@@ -95,9 +95,15 @@ async def update_item(item_id: int, item: Item, q: str | None = None):
 
 
 @app.get("/items/{item_id}")
-async def read_item(item_id: str, needy: str, skip: int = 0, limit: int | None = None):
-    item = {"item_id": item_id, "needy": needy, "skip": skip, "limit": limit}
-    return item
+async def read_item(
+    item_id: Annotated[int, Path(title="The ID of the item to get", ge=1, le=1000)],
+    size: Annotated[float, Query(gt=0, lt=10.5)],
+    q: Annotated[str | None, Query(alias="item-query")] = None,
+):
+    results = {"item_id": item_id}
+    if q:
+        results.update({"q": q})
+    return results
 
 
 @app.get("/users/{user_id}/items/{item_id}")
