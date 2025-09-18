@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Annotated, Literal
 
 
-from fastapi import FastAPI, Path, Query
+from fastapi import Body, FastAPI, Path, Query
 from pydantic import BaseModel, Field, AfterValidator, BeforeValidator
 
 
@@ -18,6 +18,11 @@ class Item(BaseModel):
     description: str | None = None
     price: float
     tax: float | None = None
+
+
+class User(BaseModel):
+    username: str
+    full_name: str | None = None
 
 
 class FilterParams(BaseModel):
@@ -96,11 +101,21 @@ async def create_item(item: Item):
 
 
 @app.put("/items/{item_id}")
-async def update_item(item_id: int, item: Item, q: str | None = None):
-    result = {"item_id": item_id, **item.dict()}
+async def update_item(
+    item_id: Annotated[int, Path(title="The ID of the item to get", ge=0, le=1000)],
+    importance: Annotated[int, Body(gt=0)],
+    q: str | None = None,
+    item: Item | None = None,
+    user: User | None = None,
+):
+    results = {"item_id": item_id}
     if q:
-        result.update({"q": q})
-    return result
+        results.update({"q": q})
+    if item:
+        results.update({"item": item})
+    if user:
+        results.update({"user": user})
+    return results
 
 
 @app.get("/items/{item_id}")
