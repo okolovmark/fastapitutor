@@ -21,13 +21,47 @@ class Image(BaseModel):
 class Item(BaseModel):
     name: str
     description: str | None = Field(
-        default=None, title="The description of the item", max_length=300
+        default=None,
+        title="The description of the item",
+        max_length=300,
+        examples=["priority 3"]
     )
     price: float = Field(gt=0, description="The price must be greater than zero")
     tax: float | None = None
     tags: set[str] = set()
     images: list[Image] | None = None
-
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "name": "string1",
+                    "description": "priority2",
+                    "price": 12,
+                    "tax": 10,
+                    "tags": ["tag1", "tag2"],
+                    "images": [
+                        {
+                            "url": "https://example.com/",
+                            "name": "string3"
+                        }
+                    ]
+                },
+                {
+                    "name": "string11",
+                    "description": "string22",
+                    "price": 121,
+                    "tax": 101,
+                    "tags": ["tag11", "tag12"],
+                    "images": [
+                        {
+                            "url": "https://example.com/",
+                            "name": "string33"
+                        }
+                    ]
+                },
+            ]
+        }
+    }
 
 class Offer(BaseModel):
     name: str
@@ -135,8 +169,20 @@ async def create_item(item: Item):
 async def update_item(
     item_id: Annotated[int, Path(title="The ID of the item to get", ge=0, le=1000)],
     importance: Annotated[int, Body(gt=0)],
+    item: Annotated[
+        Item,
+        Body(
+            examples=[
+                {
+                    "name": "Foo",
+                    "description": "priority 1",
+                    "price": 35.4,
+                    "tax": 3.2,
+                }
+            ],
+        ),
+    ],
     q: str | None = None,
-    item: Item | None = None,
     user: User | None = None,
 ):
     results = {"item_id": item_id}
