@@ -5,7 +5,7 @@ from typing import Annotated, Literal
 from uuid import UUID
 
 
-from fastapi import Body, FastAPI, Path, Query
+from fastapi import Body, Cookie, FastAPI, Path, Query
 from pydantic import BaseModel, Field, AfterValidator, BeforeValidator, HttpUrl
 
 
@@ -142,6 +142,7 @@ async def read_items(
     ] = ["foo", "bar"],
     id: Annotated[str | None, AfterValidator(check_valid_id)] = None,
     short: Annotated[bool, BeforeValidator(lambda x: x == "true")] = False,
+    ads_id: Annotated[str | None, Cookie()] = None,
 ):
     if id:
         item = data.get(id)
@@ -152,6 +153,7 @@ async def read_items(
         "q2": q2,
         "id": id,
         "name": item,
+        "ads_id": ads_id,
     }
     if q:
         results.update({"q": q})
