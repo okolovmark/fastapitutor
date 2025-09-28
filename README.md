@@ -1,6 +1,7 @@
 # FastAPI Development Environment
 
 This is a Nix-based development environment for FastAPI with Python 3.13 and PostgreSQL 15.
+[Tutorial](https://fastapi.tiangolo.com/tutorial)
 
 ## First-time Setup
 
