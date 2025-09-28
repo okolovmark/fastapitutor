@@ -15,6 +15,14 @@ class ModelName(str, Enum):
     lenet = "lenet"
 
 
+class Cookies(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    session_id: str
+    fatebook_tracker: str | None = None
+    googall_tracker: str | None = None
+
+
 class Image(BaseModel):
     url: HttpUrl
     name: str
@@ -124,6 +132,7 @@ def check_valid_id(id: str):
 
 @app.get("/items/")
 async def read_items(
+    cookies: Annotated[Cookies, Cookie()],
     q: Annotated[
         str | None,
         Query(
@@ -145,7 +154,7 @@ async def read_items(
     ads_id: Annotated[str | None, Cookie()] = None,
     user_agent: Annotated[str | None, Header()] = None,
     strange_header: Annotated[str | None, Header(convert_underscores=False)] = None,
-    x_token: Annotated[list[str] | None, Header()] = None
+    x_token: Annotated[list[str] | None, Header()] = None,
 ):
     if id:
         item = data.get(id)
@@ -160,6 +169,7 @@ async def read_items(
         "User-Agent": user_agent,
         "strange_header": strange_header,
         "X-Token values": x_token,
+        "cookies": cookies,
     }
     if q:
         results.update({"q": q})
