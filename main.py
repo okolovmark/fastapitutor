@@ -23,6 +23,16 @@ class Cookies(BaseModel):
     googall_tracker: str | None = None
 
 
+class CommonHeaders(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    host: str
+    save_data: bool
+    if_modified_since: str | None = None
+    traceparent: str | None = None
+    x_tag: list[str] = []
+
+
 class Image(BaseModel):
     url: HttpUrl
     name: str
@@ -132,7 +142,8 @@ def check_valid_id(id: str):
 
 @app.get("/items/")
 async def read_items(
-    cookies: Annotated[Cookies, Cookie()],
+    # headers: Annotated[CommonHeaders, Header(convert_underscores=False)],
+    # cookies: Annotated[Cookies | None, Cookie()] = None,
     q: Annotated[
         str | None,
         Query(
