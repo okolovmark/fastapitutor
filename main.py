@@ -4,13 +4,18 @@ from typing import Annotated, Literal
 
 
 from fastapi import Body, FastAPI, Path, Query
-from pydantic import BaseModel, Field, AfterValidator, BeforeValidator
+from pydantic import BaseModel, Field, AfterValidator, BeforeValidator, HttpUrl
 
 
 class ModelName(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
     lenet = "lenet"
+
+
+class Image(BaseModel):
+    url: HttpUrl
+    name: str
 
 
 class Item(BaseModel):
@@ -20,6 +25,15 @@ class Item(BaseModel):
     )
     price: float = Field(gt=0, description="The price must be greater than zero")
     tax: float | None = None
+    tags: set[str] = set()
+    images: list[Image] | None = None
+
+
+class Offer(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    items: list[Item]
 
 
 class User(BaseModel):
@@ -42,6 +56,21 @@ app = FastAPI()
 @app.get("/")
 async def root(filter_query: Annotated[FilterParams, Query()]):
     return filter_query
+
+
+@app.post("/index-weights/")
+async def create_index_weights(weights: dict[int, float]):
+    return weights
+
+
+@app.post("/images/multiple/")
+async def create_multiple_images(images: list[Image]):
+    return images
+
+
+@app.post("/offers/")
+async def create_offer(offer: Offer):
+    return offer
 
 
 data = {
